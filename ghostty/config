@@ -1,0 +1,5 @@
+macos-titlebar-style = hidden
+quit-after-last-window-closed = true
+window-padding-y = 10
+background = 0d0d0d
+foreground = ffffff

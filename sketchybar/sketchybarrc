@@ -1,0 +1,56 @@
+#!/bin/bash
+
+# Bar position at bottom
+sketchybar --bar \
+    position=bottom \
+    height=32 \
+    blur_radius=0 \
+    color=0xff0d0d0d \
+    border_width=0 \
+    margin=0 \
+    y_offset=0 \
+    padding_left=10 \
+    padding_right=10 \
+    shadow=off \
+    topmost=on \
+    sticky=on
+
+# Default item settings
+sketchybar --default \
+    icon.font="JetBrains Mono:Bold:14.0" \
+    icon.color=0xff666666 \
+    label.font="JetBrains Mono:Medium:14.0" \
+    label.color=0xffffffff \
+    padding_left=5 \
+    padding_right=5
+
+# AeroSpace workspaces
+for sid in 1 2 3 4 5 6 7 8 9; do
+    sketchybar --add item space.$sid left \
+        --set space.$sid \
+        icon=$sid \
+        icon.padding_left=8 \
+        icon.padding_right=8 \
+        drawing=off \
+        click_script="aerospace workspace $sid"
+done
+
+# Listen for aerospace workspace changes
+sketchybar --add event aerospace_workspace_change
+sketchybar --add item aerospace_trigger left \
+    --set aerospace_trigger \
+    drawing=off \
+    script="$CONFIG_DIR/plugins/aerospace.sh" \
+    --subscribe aerospace_trigger aerospace_workspace_change
+
+# Run aerospace script on startup to set initial state
+$CONFIG_DIR/plugins/aerospace.sh
+
+# Clock
+sketchybar --add item clock right \
+    --set clock \
+    update_freq=10 \
+    script="$CONFIG_DIR/plugins/clock.sh"
+
+# Initialize
+sketchybar --update
